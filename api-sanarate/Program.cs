@@ -3,6 +3,7 @@ using api_sanarate.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseUrls("http://0.0.0.0:5000"); // Permite escuchar en todas las interfaces
 
 // Configuración de la conexión a MySQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -22,18 +23,18 @@ builder.Services.AddScoped<IMatchService, MatchService>();
 // Agregar controladores
 builder.Services.AddControllers();
 
-// Habilitar CORS
+// Configuración de CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigin",
-        builder =>
+    options.AddPolicy("AllowAnyOrigin",
+        policy =>
         {
-            builder.WithOrigins("https://paginawebsanarate.web.app/")  // Cambia esta URL según tu frontend
-                   .AllowAnyHeader()
-                   .AllowAnyMethod();
+            policy.AllowAnyOrigin()  // Permitir solicitudes desde cualquier origen
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
         });
-});
 
+});
 // Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
