@@ -59,6 +59,12 @@ app.UseStaticFiles(new StaticFileOptions
         Path.Combine(Directory.GetCurrentDirectory(), "uploads")),
     RequestPath = "/uploads"
 });
+string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+
+if (!Directory.Exists(uploadPath))
+{
+    Directory.CreateDirectory(uploadPath);
+}
 
 
 app.UseHttpsRedirection();
