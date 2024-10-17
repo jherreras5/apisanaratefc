@@ -3,6 +3,7 @@ using api_sanarate.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.WebHost.UseUrls("http://0.0.0.0:5000"); // Permite escuchar en todas las interfaces
 
 // Configuración de la conexión a MySQL
@@ -33,8 +34,8 @@ builder.Services.AddCors(options =>
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
-
 });
+
 // Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -47,11 +48,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseSwagger();
-app.UseSwaggerUI();
 
-// Usar CORS antes de la autorización
-app.UseCors("AllowSpecificOrigin");
+app.UseCors("AllowAnyOrigin"); // Aplica la política CORS
 
 // Habilitar el servidor de archivos estáticos para la carpeta "uploads"
 app.UseStaticFiles(new StaticFileOptions
@@ -60,13 +58,13 @@ app.UseStaticFiles(new StaticFileOptions
         Path.Combine(Directory.GetCurrentDirectory(), "uploads")),
     RequestPath = "/uploads"
 });
+
 string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
 
 if (!Directory.Exists(uploadPath))
 {
     Directory.CreateDirectory(uploadPath);
 }
-
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
